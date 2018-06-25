@@ -52,7 +52,16 @@ do_lldpad_config() {
         lldptool -T -i $NETDEV -V portDesc enableTx=yes > /dev/null &&
         lldptool -T -i $NETDEV -V sysDesc enableTx=yes > /dev/null &&
         lldptool -T -i $NETDEV -V sysCap enableTx=yes > /dev/null &&
-        lldptool -T -i $NETDEV -V mngAddr enableTx=yes ipv4=$IPADDR > /dev/null
+        lldptool -T -i $NETDEV -V mngAddr enableTx=yes ipv4=$IPADDR > /dev/null &&
+        # Set DCBX mode to IEEE format
+        lldptool -T -i $NETDEV -V IEEE-DCBX mode=reset > /dev/null &&
+        lldptool -T -i $ethX -V ETS-CFG enableTx=yes > /dev/null &&
+        lldptool -T -i $ethX -V ETS-CFG willing=yes > /dev/null &&
+        lldptool -T -i $ethX -V ETS-REC enableTx=yes > /dev/null &&
+        lldptool -T -i $ethX -V ETS-REC willing=yes > /dev/null &&
+        lldptool -T -i $ethX -V APP enableTx=yes > /dev/null
+        lldptool -T -i $ethX -V APP willing=yes > /dev/null
+
         if [[ $? != 0 ]] ; then
                 >&2 echo " - Generic lldpad configuration failed"
                 exit 1
